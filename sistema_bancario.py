@@ -1,8 +1,13 @@
+from datetime import datetime
+data_atual = datetime.now().strftime("%d/%m/%Y %H:%M")
+# Sistema bancário simples em Python
 saldo = 2000 # Inicializa o saldo
 saques_realizados = 0  # Variável global para contar o número de saques
+transacoes_diarias = 0  # Limite de saques diários
 Extrato = []  # Lista para armazenar os extratos
 
 def menu():
+    
     print("""
     ##### Bem-vindo ao sistema bancário! #####
                 1. Consultar saldo
@@ -12,6 +17,9 @@ def menu():
                 5. Sair
     ##########################################
     """)
+
+   
+    
     try:
         opcao = int(input("Escolha uma opção: "))
         return opcao
@@ -19,8 +27,21 @@ def menu():
         print("Opção inválida! Por favor, digite um número.")
         return 0
 
+
 def consultar_saldo():
     global saldo
+    global transacoes_diarias
+    transacoes_diarias += 1  # Incrementa o contador de transações diárias
+    if transacoes_diarias >= 11:
+        print("""
+        ############################################           
+            Limite de transações diária atingido. 
+                Tente novamente amanhã.
+        ############################################\n\n
+        ### Saindo do sistema bancário, Até logo! ### 
+         """)
+        exit()  # Encerra o programa se o limite for atingido
+
     print(f"Seu saldo atual é R$ {saldo:.2f}")
 
     voltar = input("Deseja realizar outra operação? (s/n): ").lower()
@@ -32,12 +53,28 @@ def consultar_saldo():
 def sacar():
     global saldo
     global saques_realizados
+    global transacoes_diarias
     global Extrato
+    global data_atual
+
+    if transacoes_diarias >= 11:
+        print("""
+        ############################################           
+            Limite de transações diária atingido. 
+                Tente novamente amanhã.
+        ############################################\n\n
+        ### Saindo do sistema bancário, Até logo! ### 
+         """)
 
     if saques_realizados >= 3:
-        print("Limite de saques atingido. Tente novamente amanhã.\n\n")
+        print("""
+        ##########################################    
+            Limite de saques atingido. 
+              Tente novamente amanhã.
+        ##########################################\n\n""")
         return
-
+          
+    
     while True:  # Loop para garantir que o usuário insira um valor válido
         try:
             valor = float(input("\nDigite o valor a ser sacado: "))
@@ -50,7 +87,8 @@ def sacar():
             else:
                 saldo -= valor
                 saques_realizados += 1  # Incrementa o contador de saques
-                Extrato.append(f"Saque de R$ {valor:.2f}")  # Adiciona ao extrato
+                transacoes_diarias += 1 # Incrementa o contador de transações diárias
+                Extrato.append(f"Saque de R$ {valor:.2f} em {data_atual}")  # Adiciona ao extrato
                 print(f"Saque de R$ {valor:.2f} realizado com sucesso.\n\n")
                 break  # Sai do loop após um saque bem-sucedido
         except ValueError:
@@ -65,11 +103,23 @@ def sacar():
 def depositar():
     global saldo
     global Extrato
+    global transacoes_diarias
+    global data_atual
+
+    if transacoes_diarias >= 11:
+        print("""
+        ############################################           
+            Limite de transações diária atingido. 
+                Tente novamente amanhã.
+        ############################################\n\n
+        ### Saindo do sistema bancário, Até logo! ### 
+         """)
 
     valor = float(input("\nDigite o valor a ser depositado: "))
     if valor > 0:
         saldo += valor
-        Extrato.append(f"Depósito de R$ {valor:.2f}")  # Adiciona ao extrato
+        transacoes_diarias += 1  # Incrementa o contador de transações diárias
+        Extrato.append(f"Depósito de R$ {valor:.2f} em {data_atual}")  # Adiciona ao extrato
         print(f"Depósito de R$ {valor:.2f} realizado com sucesso.\n\n")
     else:
         print("Valor de depósito inválido. Tente novamente.\n\n")
@@ -82,6 +132,17 @@ def depositar():
 def exibir_extrato():
     global Extrato
     global saldo
+    global transacoes_diarias
+    transacoes_diarias += 1  # Incrementa o contador de transações diárias
+
+    if transacoes_diarias >= 11:
+        print("""
+        ############################################           
+            Limite de transações diária atingido. 
+                Tente novamente amanhã.
+        ############################################\n\n
+        ### Saindo do sistema bancário, Até logo! ### 
+         """)
 
     print("\n##### Extrato Bancário #####")
     if len(Extrato) == 0:
@@ -95,6 +156,7 @@ def exibir_extrato():
     if voltar != 's':
         print("Saindo do sistema bancário. Até logo!")
         exit()  # Encerra o programa se o usuário não quiser continuar 
+     
 
 # Início do programa
 if __name__ == "__main__":
