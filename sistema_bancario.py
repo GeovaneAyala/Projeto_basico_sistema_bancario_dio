@@ -79,11 +79,7 @@ class Cliente:
         self.nome = ""
         self.data_nascimento = 0
         self.cpf = ""
-        self.rua = ""
-        self.numero = 0
-        self.bairro = ""
-        self.cidade = ""
-        self.estado = ""
+        self.endereco = ""  # Armazena o endereço completo como uma única string
         self.conta = None  # Inicializa a conta como None
 
 def cadastrar_cliente():
@@ -96,11 +92,8 @@ def cadastrar_cliente():
         if validar_cpf(cliente.cpf):
             break  # Sai do loop se o CPF for válido
 
-    cliente.rua = input("Digite o nome da rua: ")
-    cliente.numero = int(input("Digite o número da residência: "))
-    cliente.bairro = input("Digite o nome do bairro: ")
-    cliente.cidade = input("Digite o nome da cidade: ")
-    cliente.estado = input("Digite o nome do estado: ")
+    # Solicita o endereço completo
+    cliente.endereco = input("Digite o endereço no formato 'Logradouro, nro - Bairro - Cidade/Sigla estado': ")
 
     if cliente.cpf in clientes:
         print("Já existe um cliente cadastrado com este CPF.")
@@ -126,10 +119,9 @@ def consultar_cliente():
         print(f"Nome: {cliente.nome}")
         print(f"Data de Nascimento: {cliente.data_nascimento}")
         print(f"CPF: {cliente.cpf}")
-        print(f"Endereço: {cliente.rua}, {cliente.numero}, {cliente.bairro}, {cliente.cidade}, {cliente.estado}")
+        print(f"Endereço: {cliente.endereco}")  # Exibe o endereço completo
     else:
         print("Cliente não encontrado.")
-       
 
 def gerar_numero_conta():
     global proximo_numero_conta
